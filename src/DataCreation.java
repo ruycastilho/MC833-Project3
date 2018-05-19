@@ -69,7 +69,10 @@ public class DataCreation {
 	    FileOutputStream fos = new FileOutputStream(fileName);
 	    ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-	    oos.writeObject(users); 
+	    for(User user : users) {
+	    	oos.writeObject(user); 
+
+	    }
 
 	    oos.close();
 	}
@@ -83,8 +86,10 @@ public class DataCreation {
 	    FileOutputStream fos = new FileOutputStream(fileName);
 	    ObjectOutputStream oos = new ObjectOutputStream(fos);
 	    
-	    oos.writeObject(subjects); 
+	    for(Subject subject : subjects) {
+	    	oos.writeObject(subject); 
 
+	    }
 	    oos.close();
 	}
 	
