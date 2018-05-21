@@ -16,5 +16,9 @@ public class Message implements Serializable {
 		this.message = message;
 	}
 	
+	public void printMessage() {
+		System.out.println(message);
+		
+	}
 
 }
