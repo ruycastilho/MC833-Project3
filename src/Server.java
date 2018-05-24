@@ -18,7 +18,6 @@ public class Server {
     FileOutputStream fop;
     ObjectOutputStream oos;
     Registry registry;
-
     
     public User validatesUser(String name, String pwd) {
     	try {	
@@ -60,6 +59,7 @@ public class Server {
     	
     }
     
+	
 	public static void main(String[] args) {
 		
 		Server server = new Server();
@@ -108,22 +108,28 @@ public class Server {
         
 		
 		// Main Loop for Operations
+    	User loggedUser = null;
 
-		try { 
-	         // Exporting the object of implementation class  
-	         // (here we are exporting the remote object to the stub) 
-	         ISubjectManager subjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
-	         
+        while (loggedUser == null) {
+           	String name = null;
+        	String pwd = null; 
+        	
+            // receber os dois inputs
 
-	         server.registry.bind("SubjectManager", subjectManagerStub);  
-	         
-	         System.err.println("Servidor Pronto."); 
-	         
-	     } catch (Exception serverException) { 
-	         System.err.println("Ocorreu uma exceção no Servidor: " + serverException.toString()); 
-	         serverException.printStackTrace(); 
-	     } 
-		
+            loggedUser = server.validatesUser(name, pwd);
+        		
+   
+        }
+
+    	// enviar loggedUser
+        
+        // receber operação
+        
+        // criar stubs pra cada operação
+        
+
+        
+        
 	}
 
 
@@ -134,3 +140,20 @@ public class Server {
 // https://www.tutorialspoint.com/java_rmi/java_rmi_quick_guide.htm
 // https://www.cs.ucsb.edu/~cappello/lectures/rmi/helloworld.shtml
 // 
+
+
+
+// try { 
+//     // Exporting the object of implementation class  
+//     // (here we are exporting the remote object to the stub) 
+//     ISubjectManager subjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
+//     
+//
+//     server.registry.bind("SubjectManager", subjectManagerStub);  
+//     
+//     System.err.println("Servidor Pronto."); 
+//     
+// } catch (Exception serverException) { 
+//     System.err.println("Ocorreu uma exceção no Servidor: " + serverException.toString()); 
+//     serverException.printStackTrace(); 
+// } 
