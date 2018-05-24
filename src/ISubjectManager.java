@@ -10,6 +10,8 @@ public interface ISubjectManager extends Remote{
 
 	public void printSubjectByCode(String Code) throws RemoteException;
 
+	public void printSubjectCodeAndTitle(String Code) throws RemoteException;
+
 	public void printSubjectByCodeAndOperation(String Code, String Operation) throws RemoteException;
 	
 	public void changeComment(String code, String new_comment, User professor) throws RemoteException;

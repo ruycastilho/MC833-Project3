@@ -112,10 +112,10 @@ public class Server {
 		try { 
 	         // Exporting the object of implementation class  
 	         // (here we are exporting the remote object to the stub) 
-	         ISubjectManager sunjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
+	         ISubjectManager subjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
 	         
 
-	         server.registry.bind("SubjectManager", sunjectManagerStub);  
+	         server.registry.bind("SubjectManager", subjectManagerStub);  
 	         
 	         System.err.println("Servidor Pronto."); 
 	         
@@ -130,3 +130,7 @@ public class Server {
 		// MUDAR COMENTARIO NO ARQUIVO DE ALGUM JEITO !!
 }
 
+// https://docs.oracle.com/javase/1.5.0/docs/guide/rmi/hello/hello-world.html
+// https://www.tutorialspoint.com/java_rmi/java_rmi_quick_guide.htm
+// https://www.cs.ucsb.edu/~cappello/lectures/rmi/helloworld.shtml
+// 

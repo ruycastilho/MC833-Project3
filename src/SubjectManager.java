@@ -32,7 +32,7 @@ public class SubjectManager implements ISubjectManager {
 		
 	}
 
-	public void printSubjectByCode(String Code) {
+	public void printSubjectCodeAndTitle(String Code) {
 		for (Subject subject : subjectList) {
 		    subject.printCodeAndTitle();
 			System.out.println("");
@@ -42,6 +42,27 @@ public class SubjectManager implements ISubjectManager {
 		
 	}
 
+	public void printSubjectByCode(String code) {
+		Boolean found = false;
+		
+		for (Subject subject : subjectList) {
+		    if (subject.getCode() == code) {
+		    	found = true;
+		    	subject.printAll();
+		    	break;
+		    }
+
+		}
+		if (found == false) {
+			System.out.println("Disciplina não encontrada.");
+
+		}
+		else {
+			System.out.println("");
+		}
+		
+	}
+	
 	public void printSubjectByCodeAndOperation(String code, String operation) {
 		Boolean found = false;
 		
