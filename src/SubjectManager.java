@@ -1,6 +1,7 @@
+import java.rmi.RemoteException;
 import java.util.*;
 
-public class SubjectManager {
+public class SubjectManager implements ISubjectManager {
 
 	private List<Subject> subjectList;
 	private int listSize;
@@ -24,10 +25,80 @@ public class SubjectManager {
 
 	public void printAll() {
 		for (Subject subject : subjectList) {
-		    subject.print();
+		    subject.printAll();
 			System.out.println("");
 
 		}
 		
 	}
+
+	public void printSubjectByCode(String Code) {
+		for (Subject subject : subjectList) {
+		    subject.printCodeAndTitle();
+			System.out.println("");
+
+		}
+		
+		
+	}
+
+	public void printSubjectByCodeAndOperation(String code, String operation) {
+		Boolean found = false;
+		
+		for (Subject subject : subjectList) {
+		    if (subject.getCode() == code) {
+		    	found = true;
+		    	
+		    	switch(operation) {
+		    	
+		    		case "1":
+		    			subject.printDescription();
+		    			break;
+	
+		    		case "5":
+		    			subject.printComment();
+		    			break;
+		    	
+		    	}
+		    }
+
+		}
+		if (found == false) {
+			System.out.println("Disciplina não encontrada.");
+
+		}
+		else {
+			System.out.println("");
+		}
+		
+	}
+
+	public void changeComment(String code, String new_comment, User professor) {
+		Boolean found = false;
+			
+		for (Subject subject : subjectList) {
+		    if (subject.getCode() == code) {
+		    	found = true;
+		    	
+		    	if (subject.getProfessor() != professor.getName() ) {
+					System.out.println("Professor logado não é o docente desse disciplina.");
+					return;
+		    		
+		    	}
+		    	
+		    	
+		    	subject.setComment(new_comment);
+		    }
+
+		}
+		if (found == false) {
+			System.out.println("Disciplina não encontrada.");
+
+		}
+		else {
+			System.out.println("");
+		}
+		
+	}
+	
 }

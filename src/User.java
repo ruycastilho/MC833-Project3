@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, IUser {
 
 	private String name;
 	private String password;

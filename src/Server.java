@@ -1,47 +1,132 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.rmi.registry.Registry; 
+import java.rmi.registry.LocateRegistry; 
+import java.rmi.RemoteException; 
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List; 
 
 public class Server {
 
 	private SubjectManager subjectManager = new SubjectManager();
-	private User currentUser;
 	FileInputStream fis;
 	ObjectInputStream ois;
     FileOutputStream fop;
     ObjectOutputStream oos;
-   
+    Registry registry;
+
+    
+    public User validatesUser(String name, String pwd) {
+    	try {	
+		    FileInputStream fis=new FileInputStream("user.ser");
+		    ObjectInputStream ois=new ObjectInputStream(fis);
+		
+		    Boolean keep_reading = true;
+		  
+		    while(keep_reading){
+			    User read_user = (User) ois.readObject();
+			  
+		        if(read_user != null) {
+		    	    if ( read_user.getName() == name && read_user.getPwd() == pwd ) {
+		    	    	return read_user;
+		    	    	
+		    	    }     	
+		        	
+		        }
+		        else
+		    	    keep_reading = false;
+		    }
+		  
+		    if (keep_reading == false) {
+				System.out.println("Usuário não encontrado ou senha incorreta.");		    	
+		    }
+		    
+	    
+		}
+		catch (IOException fileExceptiom) {
+			System.out.println("Erro na escrita, IOException.");
+			fileExceptiom.printStackTrace();
+		}
+		catch (ClassNotFoundException classException) {
+			System.out.println("Erro na escrita, ClassNotFoundException.");
+			classException.printStackTrace();
+		}
+    	
+    	return null;
+    	
+    }
+    
 	public static void main(String[] args) {
+		
+		Server server = new Server();
+
+		// Loading Subjects into SubjectManager
+		try {
+			  FileInputStream fis=new FileInputStream("subjects.ser");
+			  ObjectInputStream ois=new ObjectInputStream(fis);
+
+			  List <Subject> subjectList = new ArrayList<Subject>();
+			  Boolean keep_reading = true;
+			  
+			  while(keep_reading){
+				  Subject read_subject = (Subject) ois.readObject();
+				  
+			      if(read_subject != null)
+			    	  subjectList.add(read_subject);
+			      else
+			    	  keep_reading = false;
+			   }
+			  
+			  server.subjectManager.loadSubjects(subjectList);
+			  
+		}
+		catch (IOException fileExceptiom) {
+			System.out.println("Erro na escrita, IOException.");
+			fileExceptiom.printStackTrace();
+		}
+		catch (ClassNotFoundException classException) {
+			System.out.println("Erro na escrita, ClassNotFoundException.");
+			classException.printStackTrace();
+		}
+			
+		
+		// Initializing Registry
+		
+        try {
+        	// Binding the remote object (stub) in the registry 
+            server.registry = LocateRegistry.getRegistry(); 
+
+        }
+        catch (RemoteException remoteException) {
+	         System.err.println("Ocorreu uma exceção no Registry: " + remoteException.toString()); 
+	         remoteException.printStackTrace(); 
+        }
+        
+		
+		// Main Loop for Operations
+
+		try { 
+	         // Exporting the object of implementation class  
+	         // (here we are exporting the remote object to the stub) 
+	         ISubjectManager sunjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
+	         
+
+	         server.registry.bind("SubjectManager", sunjectManagerStub);  
+	         
+	         System.err.println("Servidor Pronto."); 
+	         
+	     } catch (Exception serverException) { 
+	         System.err.println("Ocorreu uma exceção no Servidor: " + serverException.toString()); 
+	         serverException.printStackTrace(); 
+	     } 
 		
 	}
 
 
-
+		// MUDAR COMENTARIO NO ARQUIVO DE ALGUM JEITO !!
 }
 
-
-//try {
-//  FileInputStream fis=new FileInputStream("C://object.ser");
-//  ObjectInputStream ois=new ObjectInputStream(fis);
-//  WriteObject wo=null;
-//  WriteObject[] woj=new WriteObject[5];
-//
-//  ArrayList<WriteObject> woi=new ArrayList<>();
-//  woi=(ArrayList<WriteObject>)ois.readObject();
-//
-//  for(int i=0;i<woi.size();i++){
-//      woi.get(i).getvalues();
-//  }
-//}
-
-//ArrayList<WriteObject> woi=new ArrayList<>();
-//try {
-//    FileOutputStream fop=new FileOutputStream("c://object.ser");
-//    ObjectOutputStream oos=new ObjectOutputStream(fop);
-//    woi.add(wo);
-//    woi.add(wo1);
-//    oos.writeObject(woi);
-//
-//} catch NotFoundException e) {
-//}

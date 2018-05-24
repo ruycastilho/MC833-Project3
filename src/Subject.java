@@ -55,7 +55,12 @@ public class Subject implements Serializable {
 		return room;
 	}
 	
-	public void print() {
+	public void setComment(String comment) {
+		this.comment = comment;
+	
+	}
+	
+	public void printAll() {
 		System.out.println("Código: " + this.code);
 		System.out.println("Título: " + this.name);
 		System.out.println("Instituto: " + this.institute);
@@ -67,4 +72,19 @@ public class Subject implements Serializable {
 		
 	}
 	
+	public void printCodeAndTitle() {
+		System.out.println("Código: " + this.code);
+		System.out.println("Título: " + this.name);
+		
+	}
+
+	public void printComment() {
+		System.out.println("Comentário: " + this.comment);
+
+	}
+
+	public void printDescription() {
+		System.out.println("Ementa: " + this.description);
+
+	}
 }
