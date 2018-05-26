@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 public class Subject implements Serializable {
-
+	private static final long serialVersionUID = -1491264596881968249L;
 	private String code;
 	private String name;
 	private String institute;

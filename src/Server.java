@@ -21,7 +21,7 @@ public class Server {
     
     public User validatesUser(String name, String pwd) {
     	try {	
-		    FileInputStream fis=new FileInputStream("user.ser");
+		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
 		
 		    Boolean keep_reading = true;
@@ -30,7 +30,7 @@ public class Server {
 			    User read_user = (User) ois.readObject();
 			  
 		        if(read_user != null) {
-		    	    if ( read_user.getName() == name && read_user.getPwd() == pwd ) {
+		    	    if (read_user.getName() == name && read_user.getPwd() == pwd) {
 		    	    	return read_user;
 		    	    	
 		    	    }     	
@@ -72,7 +72,7 @@ public class Server {
 			  List <Subject> subjectList = new ArrayList<Subject>();
 			  Boolean keep_reading = true;
 			  
-			  while(keep_reading){
+			  while(ois.available() > 0){
 				  Subject read_subject = (Subject) ois.readObject();
 				  
 			      if(read_subject != null)

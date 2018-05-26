@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 public class User implements Serializable, IUser {
-
+	private static final long serialVersionUID = 5943586472700425259L;
 	private String name;
 	private String password;
 	private boolean is_prof = false;
