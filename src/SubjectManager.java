@@ -18,7 +18,7 @@ public class SubjectManager implements ISubjectManager {
 	}
 
 	public void loadSubjects (List<Subject> new_subjects) {
-		this.subjectList.clear();
+		this.subjectList = new ArrayList<Subject>();
 		this.subjectList = new_subjects;
 		this.listSize = new_subjects.size();
 	}

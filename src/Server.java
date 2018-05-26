@@ -23,10 +23,8 @@ public class Server {
     	try {	
 		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
-		
-		    Boolean keep_reading = true;
 		  
-		    while(keep_reading){
+		    while(ois.available() > 0){
 			    User read_user = (User) ois.readObject();
 			  
 		        if(read_user != null) {
@@ -36,11 +34,9 @@ public class Server {
 		    	    }     	
 		        	
 		        }
-		        else
-		    	    keep_reading = false;
 		    }
 		  
-		    if (keep_reading == false) {
+		    if (ois.available() <= 0) {
 				System.out.println("Usuário não encontrado ou senha incorreta.");		    	
 		    }
 		    
@@ -70,15 +66,12 @@ public class Server {
 			  ObjectInputStream ois=new ObjectInputStream(fis);
 
 			  List <Subject> subjectList = new ArrayList<Subject>();
-			  Boolean keep_reading = true;
 			  
 			  while(ois.available() > 0){
 				  Subject read_subject = (Subject) ois.readObject();
 				  
 			      if(read_subject != null)
 			    	  subjectList.add(read_subject);
-			      else
-			    	  keep_reading = false;
 			   }
 			  
 			  server.subjectManager.loadSubjects(subjectList);
