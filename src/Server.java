@@ -20,7 +20,7 @@ public class Server {
     Registry registry;
     
     public User validatesUser(String name, String pwd) {
-    	try {	
+    	try {
 		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
 		  
@@ -31,8 +31,7 @@ public class Server {
 		    	    if (read_user.getName() == name && read_user.getPwd() == pwd) {
 		    	    	return read_user;
 		    	    	
-		    	    }     	
-		        	
+		    	    }
 		        }
 		    }
 		  

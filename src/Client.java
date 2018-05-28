@@ -1,11 +1,13 @@
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry; 
-import java.rmi.registry.Registry;  
+import java.rmi.registry.Registry;
+import java.util.Scanner;  
 
 public class Client {
 
 	private User currentUser = null;
     Registry registry;
+    Scanner scanner = new Scanner(System.in);
 
     private User login() {
     	String name, pwd;
@@ -13,10 +15,10 @@ public class Client {
     	System.out.println("Digite seu nome e senha, por favor.");
     	
     	System.out.println("Nome");
-    	name = System.console().readLine();
+    	name = scanner.nextLine();
 
     	System.out.println("Senha");
-    	pwd = System.console().readLine();
+    	pwd = scanner.nextLine();
 
     	// validar no server
     	// retornar o User se for validado
@@ -30,12 +32,12 @@ public class Client {
 
     	System.out.println("Boas vindas ao Sistema de Disciplinas da UNICAMP\\nSe deseja logar digite 1. Se deseja sair, digite 2.");
     	
-    	input = System.console().readLine();
+    	input = scanner.nextLine();
 
-    	while ( !input.equals("1") && !input.equals("2") ) {
+    	while (Integer.parseInt(input) != 1 && Integer.parseInt(input) != 2) {
     		
     		System.out.println("Por favor, digite 1 ou 2.");
-        	input = System.console().readLine();
+    		input = scanner.nextLine();
 
     	}
     	
@@ -49,15 +51,15 @@ public class Client {
     	
     	System.out.println("Menu Principal\\nDigite o número da funcionalidade que deseja:\\n1) Receber ementa de uma disciplina a partir do seu código\\n2) Receber todas as informações de uma disciplina a partir do seu código\\n3) Listar todas as informações de todas as disciplinas\\n4) Listar todos os códigos de disciplinas com seus respectivos títulos\\n5) Receber o comentário da próxima aula de uma disciplina a partir de seu código\\n6) Escrever comentário sobre próxima aula de uma de suas disciplinas\\n7) Fechar conexão");
    
-    	input = System.console().readLine();
+    	input = scanner.nextLine();
 
     	
-    	if ( currentUser.isProf() ) {
+    	if (currentUser.isProf()) {
     		
     		while ( !input.equals("1") && !input.equals("2") && !input.equals("3") && !input.equals("4") && !input.equals("5") && !input.equals("6") && !input.equals("7")) {
     			
     			System.out.println("Por favor, digite números de 1 a 7.");
-    	    	input = System.console().readLine();
+    	    	input = scanner.nextLine();
 
     			
     		}
@@ -69,7 +71,7 @@ public class Client {
     		while ( !input.equals("1") && !input.equals("2") && !input.equals("3") && !input.equals("4") && !input.equals("5") && !input.equals("6") ) {
     			
     			System.out.println("Por favor, digite números de 1 a 6.");
-    	    	input = System.console().readLine();
+    	    	input = scanner.nextLine();
     			
     		}
     		
@@ -80,7 +82,7 @@ public class Client {
     
     private String receiveCode() {
 		System.out.print("Código da Operação: ");
-    	String input = System.console().readLine();
+    	String input = scanner.nextLine();
 		
     	return input;
     }
@@ -144,15 +146,14 @@ public class Client {
         }
         catch (RemoteException remoteException) {
 	         System.err.println("Ocorreu uma exceção no Registry: " + remoteException.toString()); 
-	         remoteException.printStackTrace(); 
+	         remoteException.printStackTrace();
         }
         
         
         // Interface
-        
-        while ( client.currentUser == null ) {
+        while (client.currentUser == null) {
         	
-        	if ( client.showLoginMenu().equals("1") ) {
+        	if (client.showLoginMenu().equals("1")) {
         		client.currentUser = client.login();
         		
             }
@@ -160,8 +161,6 @@ public class Client {
             	// fechar conexão
             	
             }
-            
-            
         }
         
         String operation;
