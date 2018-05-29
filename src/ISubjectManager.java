@@ -2,6 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;  
 
+// Interface for a SubjectManager
 public interface ISubjectManager extends Remote{
 
 	public void loadSubjects (List<Subject> new_subjects) throws RemoteException;

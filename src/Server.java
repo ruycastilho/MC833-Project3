@@ -14,26 +14,32 @@ import java.util.List;
 
 public class Server implements Serializable, IServer {
 
-	private SubjectManager subjectManager = new SubjectManager("subjects.ser");
+	// Server's SubjectManager: Stores subjects data
+	private SubjectManager subjectManager = new SubjectManager();
+	
+	// File I/O variables
 	FileInputStream fis;
 	ObjectInputStream ois;
     FileOutputStream fop;
     ObjectOutputStream oos;
     
+    // User Validation: checks with Name and Password match the ones stored in 'users.ser'.
+    // Return: User object if found, 'null' if not.
     public User validatesUser(String name, String pwd) {
     	
     	try {
+    		// File Input
 		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
 		    
-		    System.out.println("name: '" + name + "' pwd: '" + pwd + "'");
-		    
+		    // Looks for match inside file
 		    int size = ois.readInt();
 		    while(size-- > 0){
 			    User read_user = (User) ois.readObject();
 			  
-			    System.out.println("read_user: '" + read_user.getName() + "' pwd: '" + read_user.getPwd() + "'");
-		        if(read_user != null) {
+			    if(read_user != null) {
+			    	
+			    	// If match is found, returns user.
 		    	    if (read_user.getName().equals(name) && read_user.getPwd().equals(pwd)) {
 		    	    	ois.close();
 		    	    	return read_user;
@@ -53,10 +59,13 @@ public class Server implements Serializable, IServer {
 			classException.printStackTrace();
 		}
     	
+    	// If match isn't found, returns null
     	return null;
     	
     }
     
+    // Main server function.
+    // Initializes variables, loads subjects to SubjectManager, create stubs, loads registry.
 	public static void main(String[] args) {
 		
 		Server server = new Server();
@@ -69,15 +78,16 @@ public class Server implements Serializable, IServer {
 
 			  List <Subject> subjectList = new ArrayList<Subject>();
 			  
+			  // Reading file
 			  int size = ois.readInt();
 			  while(size-- > 0){
 				  Subject read_subject = (Subject) ois.readObject();
 				  
 			      if(read_subject != null)
 			    	  subjectList.add(read_subject);
-			      System.out.println(read_subject.getCode());
 			   }
 			  
+			  // Loading subjects
 			  server.subjectManager.loadSubjects(subjectList);
 			  
 		}
@@ -106,7 +116,7 @@ public class Server implements Serializable, IServer {
         
 		// Server object stub
         try {
-    	    System.setProperty("java.rmi.server.hostname","192.168.1.101");
+    	    System.setProperty("java.rmi.server.hostname","127.0.0.1");
             IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
 
             registry.bind("Server", server_stub);  
@@ -121,26 +131,10 @@ public class Server implements Serializable, IServer {
             e.printStackTrace(); 
         }
 
-		// Server object stub
+        
+        // SubjectManager object stub
 	    try {
-		    System.setProperty("java.rmi.server.hostname","192.168.1.101");
-	        IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
-	
-	        registry.bind("Server", server_stub);  
-	    	
-	    }
-	    catch (RemoteException e) {
-	    	 System.err.println("Ocorreu uma exceção na criação de Stub do server: " + e.toString()); 
-	         e.printStackTrace(); 
-	    }
-	    catch (AlreadyBoundException e) {
-	   	 System.err.println("Ocorreu uma exceção no bind de Stub do server: " + e.toString()); 
-	        e.printStackTrace(); 
-	   }
-
-	 // SubjectManager object stub
-	    try {
-		    System.setProperty("java.rmi.server.hostname","192.168.1.101");
+		    System.setProperty("java.rmi.server.hostname","127.0.0.1");
 	        ISubjectManager manager_stub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
 	
 	        registry.bind("SubjectManager", manager_stub);  
@@ -157,11 +151,4 @@ public class Server implements Serializable, IServer {
 	    
 	}
 
-
-		// MUDAR COMENTARIO NO ARQUIVO DE ALGUM JEITO !!
 }
-
-// https://docs.oracle.com/javase/1.5.0/docs/guide/rmi/hello/hello-world.html
-// https://www.tutorialspoint.com/java_rmi/java_rmi_quick_guide.htm
-// https://www.cs.ucsb.edu/~cappello/lectures/rmi/helloworld.shtml
-// 
