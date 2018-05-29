@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Server implements Serializable, IServer {
 
-	private SubjectManager subjectManager = new SubjectManager();
+	private SubjectManager subjectManager = new SubjectManager("subjects.ser");
 	FileInputStream fis;
 	ObjectInputStream ois;
     FileOutputStream fop;
@@ -38,10 +38,6 @@ public class Server implements Serializable, IServer {
 		    	    }
 		        }
 		    }
-		  
-		    if (ois.available() <= 0) {
-				System.out.println("Usuário não encontrado ou senha incorreta.");		    	
-		    }
 		    
 	    	ois.close();
 
@@ -59,7 +55,6 @@ public class Server implements Serializable, IServer {
     	
     }
     
-	
 	public static void main(String[] args) {
 		
 		Server server = new Server();
@@ -120,20 +115,42 @@ public class Server implements Serializable, IServer {
         catch (AlreadyBoundException e) {
        	 System.err.println("Ocorreu uma exceção no bind de Stub do server: " + e.toString()); 
             e.printStackTrace(); 
-       }
-        
-		// Main Loop for Operations
+        }
 
+		// Server object stub
+	    try {
+		    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+	        IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
+	
+	        registry.bind("Server", server_stub);  
+	    	
+	    }
+	    catch (RemoteException e) {
+	    	 System.err.println("Ocorreu uma exceção na criação de Stub do server: " + e.toString()); 
+	         e.printStackTrace(); 
+	    }
+	    catch (AlreadyBoundException e) {
+	   	 System.err.println("Ocorreu uma exceção no bind de Stub do server: " + e.toString()); 
+	        e.printStackTrace(); 
+	   }
 
-    	// enviar loggedUser
-        
-        // receber operação
-        
-        // criar stubs pra cada operação
-        
-
-        
-        
+	 // SubjectManager object stub
+	    try {
+		    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+	        ISubjectManager manager_stub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
+	
+	        registry.bind("SubjectManager", manager_stub);  
+	    	
+	    }
+	    catch (RemoteException e) {
+	    	 System.err.println("Ocorreu uma exceção na criação de Stub do Manager: " + e.toString()); 
+	         e.printStackTrace(); 
+	    }
+	    catch (AlreadyBoundException e) {
+	   	 System.err.println("Ocorreu uma exceção no bind de Stub do Manager: " + e.toString()); 
+	        e.printStackTrace(); 
+	   }
+	    
 	}
 
 
@@ -144,20 +161,3 @@ public class Server implements Serializable, IServer {
 // https://www.tutorialspoint.com/java_rmi/java_rmi_quick_guide.htm
 // https://www.cs.ucsb.edu/~cappello/lectures/rmi/helloworld.shtml
 // 
-
-
-
-// try { 
-//     // Exporting the object of implementation class  
-//     // (here we are exporting the remote object to the stub) 
-//     ISubjectManager subjectManagerStub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
-//     
-//
-//     server.registry.bind("SubjectManager", subjectManagerStub);  
-//     
-//     System.err.println("Servidor Pronto."); 
-//     
-// } catch (Exception serverException) { 
-//     System.err.println("Ocorreu uma exceção no Servidor: " + serverException.toString()); 
-//     serverException.printStackTrace(); 
-// } 

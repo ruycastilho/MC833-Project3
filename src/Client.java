@@ -1,6 +1,7 @@
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Scanner;  
 
 public class Client {
@@ -23,7 +24,6 @@ public class Client {
     	IServer server_stub = null;
     	try {
             server_stub = (IServer) registry.lookup("Server"); 
-//            System.out.println("aqui");
             server_stub.validatesUser(name, pwd);
             
     	}
@@ -107,7 +107,26 @@ public class Client {
     private void descriptionByCode() {
     	String code = receiveCode();
     
-        // chamada pro servidor
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            Subject subject = manager_stub.getSubjectByCode(code);
+            
+            if (subject != null) {
+            	subject.printDescription();
+            
+            }
+            else {
+    			System.out.println("Disciplina não encontrada.");
+
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
 
     }
     
@@ -115,37 +134,145 @@ public class Client {
     private void allInfoByCode() {
     	String code = receiveCode();
 
-        // chamada pro servidor
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            Subject subject = manager_stub.getSubjectByCode(code);
+            
+            if (subject != null) {
+            	subject.printAll();
+            
+            }
+            else {
+    			System.out.println("Disciplina não encontrada.");
+
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
 
         
     }
 
     private void allInfos() {
         
-        // chamada pro servidor
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            List<Subject> subject_list = manager_stub.getAll();
+            
+            if (subject_list != null) {
+        		for (Subject subject : subject_list) {
+        			subject.printAll();
+        			System.out.println("");
+    
+        		}            
+            }
+            else {
+    			System.out.println("Nenhuma disciplina encontrada.");
+
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
 
         
     }
 
     private void allCodesAndTitles() {
         
-        
-        // chamada pro servidor
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            List<Subject> subject_list = manager_stub.getAll();
+            
+            if (subject_list != null) {
+        		for (Subject subject : subject_list) {
+        			subject.printCodeAndTitle();
+        			System.out.println("");
+    
+        		}            
+            }
+            else {
+    			System.out.println("Nenhuma disciplina encontrada.");
+
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
 
     }
     
     private void commentByCode() {
     	String code = receiveCode();
 
-        // chamada pro servidor
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            Subject subject = manager_stub.getSubjectByCode(code);
+            
+            if (subject != null) {
+            	subject.printComment();
+            
+            }
+            else {
+    			System.out.println("Disciplina não encontrada.");
 
-        
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
+
     }
     
     private void changeCommentByCode() {
     	String code = receiveCode();
 
-        // chamada pro servidor
+    	System.out.print("Novo comentário: ");
+    	String new_comment = scanner.nextLine();
+		
+    	ISubjectManager manager_stub = null;
+    	try {
+    		manager_stub = (ISubjectManager) registry.lookup("SubjectManager"); 
+            int result= manager_stub.changeComment(code, new_comment, this.currentUser);
+            
+            switch (result) {
+            	
+            	case 0:
+            		System.out.println("Comentário alterado com sucesso!");
+            		break;
+            	case 1:
+            		System.out.println("Usuário não é o docente desta disciplina.");
+            		break;
+            	case 2:
+            		System.out.println("Disciplina não encontrada.");
+            		break;
+            		
+            }
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup ou execução de Stub do Manager: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
+
         
     }
     
@@ -173,6 +300,11 @@ public class Client {
         	if (client.showLoginMenu().equals("1")) {
         		client.currentUser = client.login();
         		
+				if ( client.currentUser == null ) {
+					System.out.println("Usuário não encontrado ou senha incorreta.");		    	
+				
+				}
+
             }
             else {
             	// fechar conexão

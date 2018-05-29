@@ -5,10 +5,11 @@ public class SubjectManager implements ISubjectManager {
 
 	private List<Subject> subjectList;
 	private int listSize;
-
+	private String subjects_filename;
+	
 	// Default
-	public SubjectManager() {
-		
+	public SubjectManager(String filename) {
+		this.subjects_filename = filename;
 	}
 
 	public SubjectManager(List<Subject> subjectList) {
@@ -23,103 +24,45 @@ public class SubjectManager implements ISubjectManager {
 		this.listSize = new_subjects.size();
 	}
 
-	public void printAll() {
-		for (Subject subject : subjectList) {
-		    subject.printAll();
-			System.out.println("");
-
-		}
+	public List<Subject> getAll() {
+		return subjectList;
 		
 	}
 
-	public void printSubjectCodeAndTitle(String Code) {
-		for (Subject subject : subjectList) {
-		    subject.printCodeAndTitle();
-			System.out.println("");
-
-		}
-		
-		
-	}
-
-	public void printSubjectByCode(String code) {
-		Boolean found = false;
+	public Subject getSubjectByCode(String code) {
 		
 		for (Subject subject : subjectList) {
 		    if (subject.getCode() == code) {
-		    	found = true;
-		    	subject.printAll();
-		    	break;
+		    	return subject;
 		    }
 
 		}
-		if (found == false) {
-			System.out.println("Disciplina não encontrada.");
 
-		}
-		else {
-			System.out.println("");
-		}
-		
-	}
-	
-	public void printSubjectByCodeAndOperation(String code, String operation) {
-		Boolean found = false;
-		
-		for (Subject subject : subjectList) {
-		    if (subject.getCode() == code) {
-		    	found = true;
-		    	
-		    	switch(operation) {
-		    	
-		    		case "1":
-		    			subject.printDescription();
-		    			break;
-	
-		    		case "5":
-		    			subject.printComment();
-		    			break;
-		    	
-		    	}
-		    }
+		return null;
 
-		}
-		if (found == false) {
-			System.out.println("Disciplina não encontrada.");
-
-		}
-		else {
-			System.out.println("");
-		}
-		
 	}
 
-	public void changeComment(String code, String new_comment, User professor) {
-		Boolean found = false;
+	public int changeComment(String code, String new_comment, User professor) {
 			
 		for (Subject subject : subjectList) {
 		    if (subject.getCode() == code) {
-		    	found = true;
 		    	
 		    	if (subject.getProfessor() != professor.getName() ) {
 					System.out.println("Professor logado não é o docente desse disciplina.");
-					return;
+					return 1;
 		    		
 		    	}
+		    	else {
+			    	subject.setComment(new_comment);
+			    	
+			    	// ALTERAR NO ARQUIVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+			    	return 0;
+		    	}
 		    	
-		    	
-		    	subject.setComment(new_comment);
 		    }
 
 		}
-		if (found == false) {
-			System.out.println("Disciplina não encontrada.");
-
-		}
-		else {
-			System.out.println("");
-		}
-		
+		return 2;
 	}
 	
 }
