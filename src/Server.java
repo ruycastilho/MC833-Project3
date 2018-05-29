@@ -3,32 +3,36 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.rmi.registry.Registry; 
-import java.rmi.registry.LocateRegistry; 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException; 
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List; 
 
-public class Server {
+public class Server implements Serializable, IServer {
 
 	private SubjectManager subjectManager = new SubjectManager();
 	FileInputStream fis;
 	ObjectInputStream ois;
     FileOutputStream fop;
     ObjectOutputStream oos;
-    Registry registry;
     
     public User validatesUser(String name, String pwd) {
+    	
     	try {
 		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
-		  
+
 		    while(ois.available() > 0){
 			    User read_user = (User) ois.readObject();
 			  
+			    System.out.println("read_user:\n" + read_user.getName() + " pwd:" + read_user.getPwd());
 		        if(read_user != null) {
 		    	    if (read_user.getName() == name && read_user.getPwd() == pwd) {
+		    	    	ois.close();
 		    	    	return read_user;
 		    	    	
 		    	    }
@@ -39,7 +43,8 @@ public class Server {
 				System.out.println("Usuário não encontrado ou senha incorreta.");		    	
 		    }
 		    
-	    
+	    	ois.close();
+
 		}
 		catch (IOException fileExceptiom) {
 			System.out.println("Erro na escrita, IOException.");
@@ -58,6 +63,7 @@ public class Server {
 	public static void main(String[] args) {
 		
 		Server server = new Server();
+	    Registry registry = null;
 
 		// Loading Subjects into SubjectManager
 		try {
@@ -90,7 +96,7 @@ public class Server {
 		
         try {
         	// Binding the remote object (stub) in the registry 
-            server.registry = LocateRegistry.getRegistry(); 
+            registry = LocateRegistry.getRegistry(); 
 
         }
         catch (RemoteException remoteException) {
@@ -98,20 +104,26 @@ public class Server {
 	         remoteException.printStackTrace(); 
         }
         
-		
-		// Main Loop for Operations
-    	User loggedUser = null;
+        
+		// Server object stub
+        try {
+    	    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+            IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
 
-        while (loggedUser == null) {
-           	String name = null;
-        	String pwd = null; 
+            registry.bind("Server", server_stub);  
         	
-            // receber os dois inputs
-
-            loggedUser = server.validatesUser(name, pwd);
-        		
-   
         }
+        catch (RemoteException e) {
+        	 System.err.println("Ocorreu uma exceção na criação de Stub do server: " + e.toString()); 
+             e.printStackTrace(); 
+        }
+        catch (AlreadyBoundException e) {
+       	 System.err.println("Ocorreu uma exceção no bind de Stub do server: " + e.toString()); 
+            e.printStackTrace(); 
+       }
+        
+		// Main Loop for Operations
+
 
     	// enviar loggedUser
         

@@ -19,11 +19,28 @@ public class Client {
 
     	System.out.println("Senha");
     	pwd = scanner.nextLine();
-
-    	// validar no server
-    	// retornar o User se for validado
     	
-    	return null;
+    	IServer server_stub = null;
+    	try {
+            server_stub = (IServer) registry.lookup("Server"); 
+//            System.out.println("aqui");
+            server_stub.validatesUser(name, pwd);
+            
+    	}
+    	catch (Exception e) {
+    		System.err.println("Ocorreu uma exceção no lookup de Stub do server: " + e.toString()); 
+    		e.printStackTrace();     	
+    	}
+   
+        try {
+			return server_stub.validatesUser(name, pwd);
+		} catch (RemoteException e) {
+    		System.err.println("Ocorreu uma exceção no lookup de Stub do server: " + e.toString()); 
+			e.printStackTrace();
+		}
+    
+        return null;
+        
     }
     
     
@@ -141,7 +158,7 @@ public class Client {
 		
         try {
         	// Binding the remote object (stub) in the registry 
-            client.registry = LocateRegistry.getRegistry(); 
+            client.registry = LocateRegistry.getRegistry(null); 
 
         }
         catch (RemoteException remoteException) {
@@ -218,6 +235,9 @@ public class Client {
 	
 }
 
+//https://stackoverflow.com/questions/9620275/classcastexception-proxy0-cannot-be-cast-error-while-creating-simple-rmi-app
+//	https://stackoverflow.com/questions/24325928/running-socket-programming-code-in-eclipse
+//https://stackoverflow.com/questions/464687/running-rmi-server-classnotfound
 
 //	try {  
 //	 
