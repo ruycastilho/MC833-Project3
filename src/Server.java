@@ -25,16 +25,18 @@ public class Server implements Serializable, IServer {
     	try {
 		    FileInputStream fis=new FileInputStream("users.ser");
 		    ObjectInputStream ois=new ObjectInputStream(fis);
-
-		    while(ois.available() > 0){
+		    
+		    System.out.println("name: '" + name + "' pwd: '" + pwd + "'");
+		    
+		    int size = ois.readInt();
+		    while(size-- > 0){
 			    User read_user = (User) ois.readObject();
 			  
-			    System.out.println("read_user:\n" + read_user.getName() + " pwd:" + read_user.getPwd());
+			    System.out.println("read_user: '" + read_user.getName() + "' pwd: '" + read_user.getPwd() + "'");
 		        if(read_user != null) {
-		    	    if (read_user.getName() == name && read_user.getPwd() == pwd) {
+		    	    if (read_user.getName().equals(name) && read_user.getPwd().equals(pwd)) {
 		    	    	ois.close();
 		    	    	return read_user;
-		    	    	
 		    	    }
 		        }
 		    }
@@ -67,11 +69,13 @@ public class Server implements Serializable, IServer {
 
 			  List <Subject> subjectList = new ArrayList<Subject>();
 			  
-			  while(ois.available() > 0){
+			  int size = ois.readInt();
+			  while(size-- > 0){
 				  Subject read_subject = (Subject) ois.readObject();
 				  
 			      if(read_subject != null)
 			    	  subjectList.add(read_subject);
+			      System.out.println(read_subject.getCode());
 			   }
 			  
 			  server.subjectManager.loadSubjects(subjectList);
@@ -102,7 +106,7 @@ public class Server implements Serializable, IServer {
         
 		// Server object stub
         try {
-    	    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+    	    System.setProperty("java.rmi.server.hostname","192.168.1.101");
             IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
 
             registry.bind("Server", server_stub);  
@@ -119,7 +123,7 @@ public class Server implements Serializable, IServer {
 
 		// Server object stub
 	    try {
-		    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+		    System.setProperty("java.rmi.server.hostname","192.168.1.101");
 	        IServer server_stub = (IServer) UnicastRemoteObject.exportObject(server, 0);  
 	
 	        registry.bind("Server", server_stub);  
@@ -136,7 +140,7 @@ public class Server implements Serializable, IServer {
 
 	 // SubjectManager object stub
 	    try {
-		    System.setProperty("java.rmi.server.hostname","127.0.0.1");
+		    System.setProperty("java.rmi.server.hostname","192.168.1.101");
 	        ISubjectManager manager_stub = (ISubjectManager) UnicastRemoteObject.exportObject(server.subjectManager, 0);  
 	
 	        registry.bind("SubjectManager", manager_stub);  

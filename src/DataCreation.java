@@ -68,12 +68,12 @@ public class DataCreation {
 	    	
 	    FileOutputStream fos = new FileOutputStream(fileName);
 	    ObjectOutputStream oos = new ObjectOutputStream(fos);
-
+	    
+	    oos.writeInt(users.size());
 	    for(User user : users) {
 	    	oos.writeObject(user); 
 
 	    }
-
 	    oos.close();
 	}
 	
@@ -86,9 +86,9 @@ public class DataCreation {
 	    FileOutputStream fos = new FileOutputStream(fileName);
 	    ObjectOutputStream oos = new ObjectOutputStream(fos);
 	    
+	    oos.writeInt(subjects.size());
 	    for(Subject subject : subjects) {
 	    	oos.writeObject(subject); 
-
 	    }
 	    oos.close();
 	}
