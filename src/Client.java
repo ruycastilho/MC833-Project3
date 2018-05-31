@@ -55,7 +55,7 @@ public class Client {
     private String showLoginMenu() {
     	String input;
 
-    	System.out.println("Boas vindas ao Sistema de Disciplinas da UNICAMP\\nSe deseja logar digite 1. Se deseja sair, digite 2.");
+    	System.out.println("Boas vindas ao Sistema de Disciplinas da UNICAMP\nSe deseja logar digite 1. Se deseja sair, digite 2.");
     	
     	input = scanner.nextLine();
 
