@@ -2,7 +2,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry; 
 import java.rmi.registry.Registry;
 import java.util.List;
-import java.util.Scanner;  
+import java.util.Scanner;
 
 // Client class
 public class Client {
@@ -31,7 +31,7 @@ public class Client {
     	// Calls appropriate function through the stub that was obtained
     	IServer server_stub = null;
     	try {
-            server_stub = (IServer) registry.lookup("Server"); 
+            server_stub = (IServer) registry.lookup("Server");
             server_stub.validatesUser(name, pwd);
             
     	}
@@ -333,12 +333,14 @@ public class Client {
 	public static void main(String[] args) {
 		
 		Client client = new Client();
+
+        String ip = args[0];
 	
 		// Initializing Registry
 		
         try {
         	// Binding the remote object (stub) in the registry 
-            client.registry = LocateRegistry.getRegistry(null); 
+            client.registry = LocateRegistry.getRegistry(ip); 
 
         }
         catch (RemoteException remoteException) {
