@@ -28,5 +28,5 @@ Na pasta com os arquivos .class do cliente (gerados na etapa de compilação), d
 java -classpath < caminho até o diretório com os arquivos .class do cliente > -Djava.security.policy=client.policy < ip da máquina em que o servidor está rodando >
 
 ##### Exemplo
-hboschirolli:~/unicamp/current/mc833/project3/MC833-Project3/src $ javac *.java
-hboschirolli:~/unicamp/current/mc833/project3/MC833-Project3/src $ java -classpath /home/hboschirolli/unicamp/current/mc833/project3/MC833-Project3/src -Djava.security.policy=client.policy Client 192.168.1.105
+hboschirolli:\~/unicamp/current/mc833/project3/MC833-Project3/src $ javac *.java
+hboschirolli:\~/unicamp/current/mc833/project3/MC833-Project3/src $ java -classpath /home/hboschirolli/unicamp/current/mc833/project3/MC833-Project3/src -Djava.security.policy=client.policy Client 192.168.1.105
