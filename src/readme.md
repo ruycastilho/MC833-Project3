@@ -12,8 +12,8 @@ Na pasta com os arquivos .class do servidor (gerados na etapa de compilação), 
 java -classpath < caminho até o diretório com os arquivos .class do servidor > -Djava.rmi.server.hostname=< ip da máquina em que o servidor será executado > -Djava.rmi.server.codebase = < caminho até o diretório com os arquivos .class do servidor > -Djava.rmi.security.policy=server.policy Server
 
 ##### Exemplo
-hboschirolli@hboschirolli-XPS-L421X:~/unicamp/2018.1/mc823/project3/MC833-Project3/src$ javac *.java
-hboschirolli@hboschirolli-XPS-L421X:~/unicamp/2018.1/mc823/project3/MC833-Project3/src$ java -classpath /home/hboschirolli/unicamp/2018.1/mc823/project3/MC833-Project3/src/ -Djava.rmi.server.hostname=192.168.1.105 -Djava.rmi.server.codebase=/home/hboschirolli/unicamp/2018.1/mc823/project3/MC833-Project3/src/ -Djava.security.policy=server.policy Server
+hboschirolli@hboschirolli-XPS-L421X:\~/unicamp/2018.1/mc823/project3/MC833-Project3/src$ javac *.java
+hboschirolli@hboschirolli-XPS-L421X:\~/unicamp/2018.1/mc823/project3/MC833-Project3/src$ java -classpath /home/hboschirolli/unicamp/2018.1/mc823/project3/MC833-Project3/src/ -Djava.rmi.server.hostname=192.168.1.105 -Djava.rmi.server.codebase=/home/hboschirolli/unicamp/2018.1/mc823/project3/MC833-Project3/src/ -Djava.security.policy=server.policy Server
 
 
 ### Cliente
